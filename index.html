@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEGI - ფრანგული გასაჭიმი ჭერი</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Before / After Slider Styles */
+        .before-after-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1.5rem;
+            user-select: none;
+            /* ინარჩუნებს ორიგინალი ფოტოს პროპორციას ზომის შეუცვლელად */
+            aspect-ratio: 4 / 3;
+            width: 100%;
+        }
+        .img-after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+        .img-before-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 50%;
+            overflow: hidden;
+            z-index: 10;
+        }
+        .img-before {
+            height: 100%;
+            width: 100%;
+            max-width: none;
+            object-fit: cover;
+        }
+        .slider-handle {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background-color: #ffffff;
+            z-index: 20;
+            cursor: ew-resize;
+            transform: translateX(-50%);
+            box-shadow: 0 0 12px rgba(0,0,0,0.7);
+        }
+        .slider-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 42px;
+            height: 42px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+            color: #0f172a;
+            font-size: 16px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-blue-500 selection:text-white">
+
+    <!-- Ambient Background Glow -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+        <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-blue-600/15 rounded-full blur-[140px]"></div>
+        <div class="absolute top-96 -left-40 w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-[120px]"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+                TEGI<span class="text-white">.GE</span>
+            </div>
+            <a href="#calculator" class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-5 py-2 rounded-full transition shadow-lg shadow-blue-600/25 text-sm">
+                კალკულატორი
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="max-w-5xl mx-auto px-6 pt-12 pb-10 text-center">
+        <span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-4 py-1.5 rounded-full text-xs font-semibold inline-block mb-6 tracking-wide uppercase">
+            ✨ ფრანგული გასაჭიმი ჭერები
+        </span>
+        <h1 class="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight leading-tight">
+            იდეალური ჭერი რემონტის <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">ქაოსის გარეშე</span>
+        </h1>
+        <p class="text-slate-400 text-base md:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
+            მონტაჟი სულ რაღაც 1 დღეში. უმაღლესი ხარისხის მასალები 10-წლიანი გარანტიით.
+        </p>
+        <div class="inline-flex items-center gap-3 bg-slate-900/90 border border-slate-800 px-6 py-3 rounded-2xl shadow-xl">
+            <span class="text-slate-400 text-sm font-medium">კვადრატულის ფასი:</span>
+            <span class="text-xl font-bold text-emerald-400">25 - 35 ₾</span>
+        </div>
+    </section>
+
+    <!-- BEFORE / AFTER SECTION WITH YOUR EXACT PHOTOS -->
+    <section class="max-w-4xl mx-auto px-6 mb-20">
+        <div class="text-center mb-6">
+            <h2 class="text-2xl md:text-3xl font-bold text-white mb-2">რეალური შედეგი</h2>
+            <p class="text-slate-400 text-xs md:text-sm">გააჩოჩეთ ხაზი: ბეტონის ჭერი VS TEGI-ს ფრანგული გასაჭიმი ჭერი</p>
+        </div>
+
+        <div class="before-after-container shadow-2xl border border-slate-800" id="slider">
+            
+            <!-- AFTER PHOTO -->
+            <img src="after.jpg" 
+                 alt="შემდეგ - TEGI გასაჭიმი ჭერი" 
+                 class="img-after">
+            
+            <!-- BEFORE PHOTO -->
+            <div class="img-before-wrapper" id="beforeWrapper">
+                <img src="before.jpg" 
+                     alt="სანამ - ძველი ჭერი" 
+                     class="img-before" 
+                     id="beforeImg">
+            </div>
+
+            <!-- Slider Handle -->
+            <div class="slider-handle" id="sliderHandle">
+                <div class="slider-button">↔</div>
+            </div>
+        </div>
+        <div class="flex justify-between text-xs font-semibold text-slate-400 mt-3 px-2">
+            <span>◄ სანამ (სარემონტო)</span>
+            <span>შემდეგ (TEGI გასაჭიმი ჭერი) ►</span>
+        </div>
+    </section>
+
+    <!-- ONLINE CALCULATOR SECTION -->
+    <section id="calculator" class="max-w-2xl mx-auto px-6 mb-20">
+        <div class="bg-slate-900/80 backdrop-blur-xl border border-slate-800 p-6 md:p-8 rounded-3xl shadow-2xl relative overflow-hidden">
+            
+            <div class="text-center mb-8">
+                <span class="text-blue-400 font-semibold text-xs tracking-widest uppercase mb-1 block">⚡ ონლაინ კალკულატორი</span>
+                <h2 class="text-2xl md:text-3xl font-bold text-white">გამოითვალეთ სავარაუდო ფასი</h2>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Square Meters Input -->
+                <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80">
+                    <div class="flex justify-between items-center mb-3">
+                        <label for="squareInput" class="text-slate-300 font-medium text-sm">ოთახის ფართობი (მ²):</label>
+                        <div class="flex items-center gap-1">
+                            <input type="number" id="squareInput" value="35" min="1" max="300" class="w-20 bg-slate-800 border border-slate-700 text-blue-400 text-center font-bold text-lg py-1 px-2 rounded-xl focus:outline-none focus:border-blue-500">
+                            <span class="text-slate-400 text-sm font-semibold">მ²</span>
+                        </div>
+                    </div>
+                    <input type="range" id="squareRange" min="5" max="150" value="35" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500">
+                    <div class="flex justify-between text-[11px] text-slate-500 mt-2 font-medium">
+                        <span>5 მ²</span>
+                        <span>150 მ²</span>
+                    </div>
+                </div>
+
+                <!-- Ceiling Type Selector -->
+                <div>
+                    <label class="block text-slate-300 font-medium text-sm mb-3">აირჩიეთ ჭერის ტიპი:</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <label class="relative flex items-center p-3.5 bg-slate-950/60 border border-slate-800 rounded-2xl cursor-pointer hover:border-blue-500/50 transition has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+                            <input type="radio" name="ceilingType" value="25" data-name="სტანდარტული (მათე / პრიალა)" checked class="accent-blue-500 w-4 h-4 mr-3">
+                            <div>
+                                <div class="text-white text-sm font-semibold">სტანდარტული (მატოვი/ პრიალა)</div>
+                                <div class="text-xs text-blue-400 font-medium mt-0.5">25 ₾ / მ²</div>
+                            </div>
+                        </label>
+
+                        <label class="relative flex items-center p-3.5 bg-slate-950/60 border border-slate-800 rounded-2xl cursor-pointer hover:border-blue-500/50 transition has-[:checked]:border-blue-500 has-[:checked]:bg-blue-500/10">
+                            <input type="radio" name="ceilingType" value="35" data-name="სატინი / განათებით" class="accent-blue-500 w-4 h-4 mr-3">
+                            <div>
+                                <div class="text-white text-sm font-semibold">სანათი / განათებით</div>
+                                <div class="text-xs text-blue-400 font-medium mt-0.5">35 ₾ / მ²</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Spotlights Input -->
+                <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="text-slate-300 font-medium text-sm">წერტილოვანი განათება (სპოტი):</label>
+                        <span id="spotlightDisplay" class="text-sm font-bold text-amber-400">4 ცალი (+60 ₾)</span>
+                    </div>
+                    <input type="range" id="spotlightRange" min="0" max="30" value="4" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                    <div class="flex justify-between text-[11px] text-slate-500 mt-2 font-medium">
+                        <span>0 ცალი</span>
+                        <span>30 ცალი (15 ₾/ც)</span>
+                    </div>
+                </div>
+
+                <!-- Calculation Result & WhatsApp Button -->
+                <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 text-center space-y-4">
+                    <div>
+                        <span class="text-slate-400 text-xs block mb-1">სავარაუდო ჯამური ღირებულება:</span>
+                        <div id="totalPrice" class="text-3xl md:text-4xl font-black text-emerald-400 tracking-tight">935 ₾</div>
+                        <span id="priceRangeInfo" class="text-[11px] text-slate-500 block mt-1">(დიაპაზონი: 935 ₾ - 1,285 ₾)</span>
+                    </div>
+
+                    <!-- WHATSAPP BUTTON -->
+                    <a id="whatsappBtn" href="#" target="_blank" class="inline-flex items-center justify-center gap-2.5 w-full bg-emerald-600 hover:bg-emerald-500 active:scale-[0.99] text-white font-bold py-3 px-5 rounded-xl transition text-sm shadow-lg shadow-emerald-950/50">
+                        <svg class="w-5 h-5 fill-current text-white shrink-0" viewBox="0 0 24 24">
+                            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                        </svg>
+                        <span>შეკვეთა WhatsApp-ით</span>
+                    </a>
+
+                    <span class="text-[10px] text-slate-500 block">*ზუსტი ფასი დადგინდება ადგილზე უფასო აზომვისას</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-900 text-center py-6 text-slate-600 text-xs">
+        &copy; 2026 TEGI. ყველა უფლება დაცულია.
+    </footer>
+
+    <!-- JS Logic -->
+    <script>
+        // --- Slider JavaScript ---
+        const container = document.getElementById('slider');
+        const beforeWrapper = document.getElementById('beforeWrapper');
+        const beforeImg = document.getElementById('beforeImg');
+        const handle = document.getElementById('sliderHandle');
+
+        function updateSliderWidth() {
+            if (container && beforeImg) {
+                beforeImg.style.width = container.offsetWidth + 'px';
+            }
+        }
+        window.addEventListener('resize', updateSliderWidth);
+        updateSliderWidth();
+
+        let isSliding = false;
+
+        const moveSlider = (x) => {
+            const rect = container.getBoundingClientRect();
+            let position = x - rect.left;
+            if (position < 0) position = 0;
+            if (position > rect.width) position = rect.width;
+
+            const percentage = (position / rect.width) * 100;
+            beforeWrapper.style.width = `${percentage}%`;
+            handle.style.left = `${percentage}%`;
+        };
+
+        container.addEventListener('mousedown', () => isSliding = true);
+        window.addEventListener('mouseup', () => isSliding = false);
+        window.addEventListener('mousemove', (e) => {
+            if (!isSliding) return;
+            moveSlider(e.clientX);
+        });
+
+        container.addEventListener('touchstart', () => isSliding = true);
+        window.addEventListener('touchend', () => isSliding = false);
+        window.addEventListener('touchmove', (e) => {
+            if (!isSliding) return;
+            moveSlider(e.touches[0].clientX);
+        });
+
+        // --- Calculator JavaScript ---
+        const squareInput = document.getElementById('squareInput');
+        const squareRange = document.getElementById('squareRange');
+        const spotlightRange = document.getElementById('spotlightRange');
+        const spotlightDisplay = document.getElementById('spotlightDisplay');
+        const totalPrice = document.getElementById('totalPrice');
+        const priceRangeInfo = document.getElementById('priceRangeInfo');
+        const ceilingRadios = document.getElementsByName('ceilingType');
+        const whatsappBtn = document.getElementById('whatsappBtn');
+
+        const SPOT_PRICE = 15;
+        const PHONE_NUMBER = "995597116124"; // ჩაწერეთ რეალური WhatsApp ნომერი
+
+        function calculate() {
+            let area = parseFloat(squareInput.value);
+            if (isNaN(area) || area < 0) area = 0;
+
+            const spotlights = parseInt(spotlightRange.value) || 0;
+
+            let selectedRate = 25;
+            let typeName = "სტანდარტული (მათე / პრიალა)";
+
+            for (const radio of ceilingRadios) {
+                if (radio.checked) {
+                    selectedRate = parseFloat(radio.value);
+                    typeName = radio.getAttribute('data-name');
+                    break;
+                }
+            }
+
+            const spotTotal = spotlights * SPOT_PRICE;
+            spotlightDisplay.textContent = `${spotlights} ცალი (+${spotTotal} ₾)`;
+
+            const currentTotal = Math.round((area * selectedRate) + spotTotal);
+            const minTotal = Math.round((area * 25) + spotTotal);
+            const maxTotal = Math.round((area * 35) + spotTotal);
+
+            totalPrice.textContent = `${currentTotal.toLocaleString('ka-GE')} ₾`;
+            priceRangeInfo.textContent = `(სავარაუდო დიაპაზონი: ${minTotal.toLocaleString('ka-GE')} ₾ - ${maxTotal.toLocaleString('ka-GE')} ₾)`;
+
+            const text = `გამარჯობა, TEGI!\nმინდა გასაჭიმი ჭერის შეკვეთა:\n` +
+                         `• ფართობი: ${area} მ²\n` +
+                         `• ჭერის ტიპი: ${typeName}\n` +
+                         `• სპოტი (განათება): ${spotlights} ცალი\n` +
+                         `• სავარაუდო ჯამური ფასი: ${currentTotal} ₾`;
+
+            whatsappBtn.href = `https://wa.me/${PHONE_NUMBER}?text=${encodeURIComponent(text)}`;
+        }
+
+        squareInput.addEventListener('input', () => {
+            squareRange.value = squareInput.value;
+            calculate();
+        });
+
+        squareRange.addEventListener('input', () => {
+            squareInput.value = squareRange.value;
+            calculate();
+        });
+
+        spotlightRange.addEventListener('input', calculate);
+        ceilingRadios.forEach(r => r.addEventListener('change', calculate));
+
+        calculate();
+    </script>
+</body>
+</html>
